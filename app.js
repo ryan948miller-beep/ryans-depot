@@ -101,3 +101,26 @@ async function loadItems() {
     `;
   });
 }
+import { addSKU } from "./addItem.js";
+
+/**
+ * Button handler from HTML
+ */
+window.addItem = async function () {
+  const sku = document.getElementById("skuInput").value;
+  const name = document.getElementById("nameInput").value;
+  const category = document.getElementById("categoryInput").value;
+
+  if (!sku || !name) {
+    alert("Enter SKU + name");
+    return;
+  }
+
+  try {
+    await addSKU(sku, name, category);
+    alert("Item added to tracker!");
+  } catch (err) {
+    console.error(err);
+    alert("Error adding item");
+  }
+};
