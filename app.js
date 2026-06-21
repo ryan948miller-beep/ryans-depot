@@ -15,6 +15,7 @@ import {
 
 import { addSKU } from "./addItem.js";
 
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBNhrbPLoIM66FkHzx3si5nqGl8JP3XuGU",
   authDomain: "ryans-depot.firebaseapp.com",
@@ -24,24 +25,40 @@ const firebaseConfig = {
   appId: "1:312220432397:web:7855072ff18da248263d44"
 };
 
+// Init
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// UI elements
 const loginBtn = document.getElementById("loginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 const appDiv = document.getElementById("app");
 const itemsDiv = document.getElementById("itemsList");
 
+// ---------------- LOGIN FIX ----------------
 loginBtn.onclick = async () => {
-  const provider = new GoogleAuthProvider();
-  await signInWithPopup(auth, provider);
+  try {
+    const provider = new GoogleAuthProvider();
+
+    // IMPORTANT: prevents silent popup crash issues
+    provider.setCustomParameters({
+      prompt: "select_account"
+    });
+
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    console.error("Login error:", err);
+    alert("Google sign-in failed. Check Firebase Authorized Domains.");
+  }
 };
 
+// ---------------- LOGOUT ----------------
 logoutBtn.onclick = async () => {
   await signOut(auth);
 };
 
+// ---------------- AUTH STATE ----------------
 onAuthStateChanged(auth, (user) => {
   if (user) {
     loginBtn.style.display = "none";
@@ -55,6 +72,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+// ---------------- ADD ITEM ----------------
 window.addItem = async function () {
   const sku = document.getElementById("skuInput").value;
   const name = document.getElementById("nameInput").value;
@@ -65,25 +83,30 @@ window.addItem = async function () {
     return;
   }
 
-  await addSKU(sku, name, category);
-
-  alert("Item added!");
-  loadItems();
+  try {
+    await addSKU(sku, name, category);
+    alert("Item added!");
+    loadItems();
+  } catch (err) {
+    console.error(err);
+    alert("Failed to add item");
+  }
 };
 
+// ---------------- LOAD ITEMS ----------------
 async function loadItems() {
   itemsDiv.innerHTML = "";
 
-  const querySnapshot = await getDocs(collection(db, "items"));
+  const snapshot = await getDocs(collection(db, "items"));
 
-  querySnapshot.forEach((doc) => {
-    const item = doc.data();
+  snapshot.forEach((docSnap) => {
+    const item = docSnap.data();
 
     itemsDiv.innerHTML += `
-      <div class="item">
+      <div class="item" style="border:1px solid #ccc; padding:8px; margin:5px;">
         <strong>${item.name || "No name"}</strong><br>
         SKU: ${item.sku}<br>
-        Category: ${item.category}<br>
+        Category: ${item.category || "N/A"}<br>
         Price: $${item.currentPrice || 0}<br>
         Score: ${item.pennyScore || 0}
       </div>
