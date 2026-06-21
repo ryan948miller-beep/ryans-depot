@@ -2,7 +2,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -10,11 +11,8 @@ import {
 import {
   getFirestore,
   collection,
-  addDoc,
   getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import { addSKU } from "./addItem.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBNhrbPLoIM66FkHzx3si5nqGl8JP3XuGU",
@@ -25,41 +23,42 @@ const firebaseConfig = {
   appId: "1:312220432397:web:7855072ff18da248263d44"
 };
 
+// INIT (must be FIRST)
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// UI
 const loginBtn = document.getElementById("loginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 const appDiv = document.getElementById("app");
 const itemsDiv = document.getElementById("itemsList");
-const addBtn = document.getElementById("addBtn");
 
 // ---------------- LOGIN ----------------
-import {
-  signInWithRedirect,
-  getRedirectResult,
-  GoogleAuthProvider
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 loginBtn.onclick = async () => {
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: "select_account" });
 
-  await signInWithRedirect(auth, provider);
+  try {
+    await signInWithRedirect(auth, provider);
+  } catch (err) {
+    console.error("Login error:", err);
+  }
 };
 
+// ---------------- HANDLE REDIRECT ----------------
 getRedirectResult(auth)
   .then((result) => {
     if (result?.user) {
-      console.log("Logged in:", result.user);
+      console.log("Logged in:", result.user.email);
     }
   })
-  .catch((err) => console.error(err));
+  .catch((error) => {
+    console.error("Redirect error:", error);
+  });
+
 // ---------------- LOGOUT ----------------
-logoutBtn.onclick = async () => {
-  await signOut(auth);
-};
+logoutBtn.onclick = () => signOut(auth);
 
 // ---------------- AUTH STATE ----------------
 onAuthStateChanged(auth, (user) => {
@@ -75,22 +74,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// ---------------- ADD ITEM ----------------
-addBtn.onclick = async () => {
-  const sku = document.getElementById("skuInput").value;
-  const name = document.getElementById("nameInput").value;
-  const category = document.getElementById("categoryInput").value;
-
-  if (!sku || !name) {
-    alert("Missing SKU or name");
-    return;
-  }
-
-  await addSKU(sku, name, category);
-
-  loadItems();
-};
-
 // ---------------- LOAD ITEMS ----------------
 async function loadItems() {
   itemsDiv.innerHTML = "";
@@ -102,9 +85,9 @@ async function loadItems() {
 
     itemsDiv.innerHTML += `
       <div style="border:1px solid #ccc; padding:8px; margin:5px;">
-        <b>${item.name}</b><br>
-        SKU: ${item.sku}<br>
-        Category: ${item.category}<br>
+        <b>${item.name || "No name"}</b><br>
+        SKU: ${item.sku || "N/A"}<br>
+        Category: ${item.category || "N/A"}<br>
         Price: $${item.currentPrice || 0}<br>
         Score: ${item.pennyScore || 0}
       </div>
