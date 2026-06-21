@@ -1,6 +1,7 @@
 name: Ryan Depot Crawl
 
 on:
+  workflow_dispatch:   # <-- THIS ENABLES RUN BUTTON
   schedule:
     - cron: "30 5 * * *"
     - cron: "0 13 * * *"
