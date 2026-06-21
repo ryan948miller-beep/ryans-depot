@@ -14,31 +14,32 @@ async function runTracker() {
 
     const updated = {
       ...item,
-      previousPrice: item.currentPrice,
-      currentPrice: live.price,
-      stock: live.stock,
 
-      priceHistory: [
-        ...(item.priceHistory || []),
-        {
-          price: live.price,
-          time: new Date().toISOString()
-        }
-      ]
+      previousPrice: item.currentPrice || 0,
+      currentPrice: live.price,
+      lastChecked: new Date().toISOString()
     };
+
+    updated.priceHistory = [
+      ...(item.priceHistory || []),
+      {
+        price: live.price,
+        time: new Date().toISOString()
+      }
+    ];
 
     updated.pennyScore = calculatePennyScore({
       price: updated.currentPrice,
       previousPrice: updated.previousPrice,
-      category: item.category,
-      stock: updated.stock,
+      category: updated.category,
+      stock: live.stock,
       dropCount: updated.priceHistory.length
     });
 
     await doc.ref.set(updated, { merge: true });
   }
 
-  console.log("Live tracking complete");
+  console.log("Tracker finished run");
 }
 
 runTracker();
