@@ -4,58 +4,24 @@
   <title>Ryan's Depot</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
   <h1>Ryan’s Depot</h1>
 
+  <!-- LOGIN -->
   <button id="loginBtn">Sign in with Google</button>
   <button id="logoutBtn" style="display:none;">Logout</button>
 
+  <!-- APP -->
   <div id="app" style="display:none;">
+
     <h2>Add Item</h2>
 
-    <input id="sku" placeholder="SKU">
-    <input id="name" placeholder="Item Name">
+    <input id="skuInput" placeholder="SKU">
+    <input id="nameInput" placeholder="Item Name">
 
-    <select id="store">
-      <option>Concord</option>
-      <option>Pittsburg</option>
-      <option>Martinez</option>
-      <option>San Ramon</option>
-    </select>
-
-    <input id="originalPrice" type="number" placeholder="Original Price">
-    <input id="currentPrice" type="number" placeholder="Current Price">
-    <input id="resalePrice" type="number" placeholder="Resale Price">
-    <input id="notes" placeholder="Notes">
-
-    <button id="saveBtn">Save Item</button>
-
-    <h2>Saved Items</h2>
-    <div id="items"></div>
-  </div>
-
-  <script type="module" src="app.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Ryan's Depot</title>
-</head>
-
-<body>
-
-  <h1>Ryan's Depot</h1>
-
-  <!-- ADD ITEM SECTION -->
-  <div style="padding:10px; border:1px solid #ccc; width:300px;">
-    <h3>Add Item</h3>
-
-    <input id="skuInput" placeholder="SKU" style="width:100%; margin-bottom:5px;" />
-
-    <input id="nameInput" placeholder="Item name" style="width:100%; margin-bottom:5px;" />
-
-    <select id="categoryInput" style="width:100%; margin-bottom:5px;">
+    <select id="categoryInput">
       <option value="tools">Tools</option>
       <option value="seasonal">Seasonal</option>
       <option value="lighting">Lighting</option>
@@ -63,14 +29,15 @@
       <option value="plumbing">Plumbing</option>
     </select>
 
-    <button onclick="addItem()" style="width:100%;">Add Item</button>
+    <button onclick="addItem()">Add Item</button>
+
+    <h2>Saved Items</h2>
+    <div id="itemsList"></div>
+
   </div>
 
-  <hr>
-
-  <!-- THIS IS WHERE YOUR ITEMS WILL SHOW -->
-  <div id="itemsList"></div>
+  <!-- ONLY ONE SCRIPT FILE -->
+  <script type="module" src="./app.js"></script>
 
 </body>
 </html>
-<script type="module" src="./main.js"></script>
