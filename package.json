@@ -1,0 +1,9 @@
+{
+  "name": "ryans-depot-crawler",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "axios": "^1.6.0"
+  }
+}
