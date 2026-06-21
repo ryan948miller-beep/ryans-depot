@@ -36,16 +36,26 @@ const itemsDiv = document.getElementById("itemsList");
 const addBtn = document.getElementById("addBtn");
 
 // ---------------- LOGIN ----------------
+import {
+  signInWithRedirect,
+  getRedirectResult,
+  GoogleAuthProvider
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 loginBtn.onclick = async () => {
-  try {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
-  } catch (e) {
-    console.error(e);
-    alert("Login blocked. Check Firebase Authorized Domains.");
-  }
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+
+  await signInWithRedirect(auth, provider);
 };
 
+getRedirectResult(auth)
+  .then((result) => {
+    if (result?.user) {
+      console.log("Logged in:", result.user);
+    }
+  })
+  .catch((err) => console.error(err));
 // ---------------- LOGOUT ----------------
 logoutBtn.onclick = async () => {
   await signOut(auth);
