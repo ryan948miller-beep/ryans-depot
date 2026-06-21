@@ -21,4 +21,4 @@ jobs:
 
       - run: node crawler.js
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_KEY }}
+  GCP_KEY: ${{ secrets.GCP_KEY }}
