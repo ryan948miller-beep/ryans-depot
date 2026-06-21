@@ -1,20 +1,36 @@
-<div style="padding: 10px; border: 1px solid #ccc; width: 300px;">
-  
-  <h3>Add Item</h3>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ryan's Depot</title>
+</head>
 
-  <input id="skuInput" placeholder="SKU" style="width:100%; margin-bottom:5px;" />
+<body>
 
-  <input id="nameInput" placeholder="Item name" style="width:100%; margin-bottom:5px;" />
+  <h1>Ryan's Depot</h1>
 
-  <select id="categoryInput" style="width:100%; margin-bottom:5px;">
-    <option value="tools">Tools</option>
-    <option value="seasonal">Seasonal</option>
-    <option value="lighting">Lighting</option>
-    <option value="hardware">Hardware</option>
-    <option value="plumbing">Plumbing</option>
-    <option value="automotive">Automotive</option>
-  </select>
+  <!-- ADD ITEM SECTION -->
+  <div style="padding:10px; border:1px solid #ccc; width:300px;">
+    <h3>Add Item</h3>
 
-  <button onclick="addItem()" style="width:100%;">Add Item</button>
+    <input id="skuInput" placeholder="SKU" style="width:100%; margin-bottom:5px;" />
 
-</div>
+    <input id="nameInput" placeholder="Item name" style="width:100%; margin-bottom:5px;" />
+
+    <select id="categoryInput" style="width:100%; margin-bottom:5px;">
+      <option value="tools">Tools</option>
+      <option value="seasonal">Seasonal</option>
+      <option value="lighting">Lighting</option>
+      <option value="hardware">Hardware</option>
+      <option value="plumbing">Plumbing</option>
+    </select>
+
+    <button onclick="addItem()" style="width:100%;">Add Item</button>
+  </div>
+
+  <hr>
+
+  <!-- THIS IS WHERE YOUR ITEMS WILL SHOW -->
+  <div id="itemsList"></div>
+
+</body>
+</html>
