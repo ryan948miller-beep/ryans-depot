@@ -10,9 +10,10 @@ import {
 import {
   getFirestore,
   collection,
-  addDoc,
   getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import { addSKU } from "./addItem.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBNhrbPLoIM66FkHzx3si5nqGl8JP3XuGU",
@@ -30,8 +31,7 @@ const db = getFirestore(app);
 const loginBtn = document.getElementById("loginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 const appDiv = document.getElementById("app");
-const saveBtn = document.getElementById("saveBtn");
-const itemsDiv = document.getElementById("items");
+const itemsDiv = document.getElementById("itemsList");
 
 loginBtn.onclick = async () => {
   const provider = new GoogleAuthProvider();
@@ -55,57 +55,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-saveBtn.onclick = async () => {
-  const sku = document.getElementById("sku").value;
-  const name = document.getElementById("name").value;
-  const store = document.getElementById("store").value;
-  const originalPrice = parseFloat(document.getElementById("originalPrice").value);
-  const currentPrice = parseFloat(document.getElementById("currentPrice").value);
-  const resalePrice = parseFloat(document.getElementById("resalePrice").value);
-  const notes = document.getElementById("notes").value;
-
-  const profit = resalePrice - currentPrice;
-
-  await addDoc(collection(db, "items"), {
-    sku,
-    name,
-    store,
-    originalPrice,
-    currentPrice,
-    resalePrice,
-    profit,
-    notes,
-    date: new Date()
-  });
-
-  loadItems();
-};
-
-async function loadItems() {
-  itemsDiv.innerHTML = "";
-  const querySnapshot = await getDocs(collection(db, "items"));
-
-  querySnapshot.forEach((doc) => {
-    const item = doc.data();
-
-    itemsDiv.innerHTML += `
-      <div class="item">
-        <strong>${item.name}</strong><br>
-        SKU: ${item.sku}<br>
-        Store: ${item.store}<br>
-        Current: $${item.currentPrice}<br>
-        Resale: $${item.resalePrice}<br>
-        Profit: $${item.profit}<br>
-        Notes: ${item.notes}
-      </div>
-    `;
-  });
-}
-import { addSKU } from "./addItem.js";
-
-/**
- * Button handler from HTML
- */
 window.addItem = async function () {
   const sku = document.getElementById("skuInput").value;
   const name = document.getElementById("nameInput").value;
@@ -116,11 +65,28 @@ window.addItem = async function () {
     return;
   }
 
-  try {
-    await addSKU(sku, name, category);
-    alert("Item added to tracker!");
-  } catch (err) {
-    console.error(err);
-    alert("Error adding item");
-  }
+  await addSKU(sku, name, category);
+
+  alert("Item added!");
+  loadItems();
 };
+
+async function loadItems() {
+  itemsDiv.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "items"));
+
+  querySnapshot.forEach((doc) => {
+    const item = doc.data();
+
+    itemsDiv.innerHTML += `
+      <div class="item">
+        <strong>${item.name || "No name"}</strong><br>
+        SKU: ${item.sku}<br>
+        Category: ${item.category}<br>
+        Price: $${item.currentPrice || 0}<br>
+        Score: ${item.pennyScore || 0}
+      </div>
+    `;
+  });
+}
