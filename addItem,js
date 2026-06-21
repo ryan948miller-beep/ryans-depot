@@ -1,0 +1,15 @@
+import { db } from "./firebase.js";
+import { doc, setDoc } from "firebase/firestore";
+
+export async function addSKU(sku, name, category) {
+  await setDoc(doc(db, "items", sku), {
+    sku,
+    name,
+    category,
+    currentPrice: 0,
+    previousPrice: 0,
+    priceHistory: [],
+    pennyScore: 0,
+    lastChecked: null
+  });
+}
