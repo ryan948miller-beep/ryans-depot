@@ -1,7 +1,7 @@
 name: Ryan Depot Crawl
 
 on:
-  workflow_dispatch:   # <-- THIS ENABLES RUN BUTTON
+  workflow_dispatch:
   schedule:
     - cron: "30 5 * * *"
     - cron: "0 13 * * *"
@@ -11,14 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
-      - run: npm install
+      - name: Install dependencies
+        run: npm install
 
-      - run: node crawler.js
+      - name: Run crawler
         env:
-  GCP_KEY: ${{ secrets.GCP_KEY }}
+          GCP_KEY: ${{ secrets.GCP_KEY }}
+        run: node crawler.js
