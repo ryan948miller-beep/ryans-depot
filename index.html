@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ryan's Depot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Ryan’s Depot</h1>
+
+  <button id="loginBtn">Sign in with Google</button>
+  <button id="logoutBtn" style="display:none;">Logout</button>
+
+  <div id="app" style="display:none;">
+    <h2>Add Item</h2>
+
+    <input id="sku" placeholder="SKU">
+    <input id="name" placeholder="Item Name">
+
+    <select id="store">
+      <option>Concord</option>
+      <option>Pittsburg</option>
+      <option>Martinez</option>
+      <option>San Ramon</option>
+    </select>
+
+    <input id="originalPrice" type="number" placeholder="Original Price">
+    <input id="currentPrice" type="number" placeholder="Current Price">
+    <input id="resalePrice" type="number" placeholder="Resale Price">
+    <input id="notes" placeholder="Notes">
+
+    <button id="saveBtn">Save Item</button>
+
+    <h2>Saved Items</h2>
+    <div id="items"></div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
