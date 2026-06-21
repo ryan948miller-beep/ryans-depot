@@ -9,34 +9,30 @@
 
   <h1>Ryan’s Depot</h1>
 
-  <!-- LOGIN -->
   <button id="loginBtn">Sign in with Google</button>
   <button id="logoutBtn" style="display:none;">Logout</button>
 
-  <!-- APP -->
   <div id="app" style="display:none;">
 
     <h2>Add Item</h2>
 
-    <input id="skuInput" placeholder="SKU">
-    <input id="nameInput" placeholder="Item Name">
+    <input id="skuInput" placeholder="SKU"><br><br>
+    <input id="nameInput" placeholder="Item Name"><br><br>
 
     <select id="categoryInput">
       <option value="tools">Tools</option>
       <option value="seasonal">Seasonal</option>
       <option value="lighting">Lighting</option>
       <option value="hardware">Hardware</option>
-      <option value="plumbing">Plumbing</option>
-    </select>
+    </select><br><br>
 
-    <button onclick="addItem()">Add Item</button>
+    <button id="addBtn">Add Item</button>
 
-    <h2>Saved Items</h2>
+    <h2>Items</h2>
     <div id="itemsList"></div>
 
   </div>
 
-  <!-- ONLY ONE SCRIPT FILE -->
   <script type="module" src="./app.js"></script>
 
 </body>
